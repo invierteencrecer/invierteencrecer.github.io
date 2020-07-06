@@ -1,0 +1,45 @@
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+  var geo = {};
+  var geo_span = null;
+
+  var xhr = new XMLHttpRequest();
+
+if (location.protocol != 'https:')
+{
+ xhr.open('GET', 'http://www.geoplugin.net/json.gp?ip=');
+}
+else{
+  xhr.open('GET', 'https://ssl.geoplugin.net/json.gp?ip=&k=352685497157a1b8');
+}
+  // xhr.open('GET', 'https://ssl.geoplugin.net/json.gp?ip=&k=352685497157a1b8');
+
+  xhr.send();
+
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      geo = JSON.parse(xhr.responseText);
+      
+      geo_span_num = document.querySelector("#ip-geo-num").innerHTML;
+      geo_span_num = geo_span_num.replace("%NUM%", "" + getRandomInt(70, 110));
+      document.querySelector("#ip-geo-num").innerHTML = geo_span_num;
+      $("#ip-geo-num").show();
+      
+      geo_span_reg = document.querySelector("#ip-geo-reg").innerHTML;
+      geo_span_reg = geo_span_reg.replace("%REGION%", "" + geoplugin_region());
+      document.querySelector("#ip-geo-reg").innerHTML = geo_span_reg;
+      $("#ip-geo-reg").show();
+      
+      geo_span_pais = document.querySelector("#ip-geo-pais").innerHTML;
+      geo_span_pais = geo_span_pais.replace("%PAIS%", "" + geoplugin_countryName());
+      document.querySelector("#ip-geo-pais").innerHTML = geo_span_pais;
+      $("#ip-geo-pais").show();
+
+      //document.querySelector("#ip-geo").style.visibility = "visible"
+    }
+  }.bind(this);
+
+});
